@@ -1,6 +1,0 @@
-com\hxline\thumbsservice\service\ThumbService.class
-com\hxline\thumbsservice\domain\Thumb.class
-com\hxline\thumbsservice\register\ThumbsServer.class
-com\hxline\thumbsservice\service\interfaced\ThumbInterface.class
-com\hxline\thumbsservice\config\HystrixConfiguration.class
-com\hxline\thumbsservice\hibernate\ThumbHibernate.class
