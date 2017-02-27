@@ -38,9 +38,10 @@ spring:
         serialization.indent_output: true
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:postgres://tjspnqyoeekrcu:a0fafdfafeb2a31ac064a1cc85465b293a83a8ed581f997915aa2b8b8ed0be0a@ec2-54-225-66-44.compute-1.amazonaws.com:5432/d4jjodt6veq0dq
+        url: jdbc:postgresql://ec2-54-225-66-44.compute-1.amazonaws.com:5432/d4jjodt6veq0dq
         username: tjspnqyoeekrcu
         password: a0fafdfafeb2a31ac064a1cc85465b293a83a8ed581f997915aa2b8b8ed0be0a
+        ssl: true
     jpa:
         database-platform: io.github.jhipster.domain.util.FixedPostgreSQL82Dialect
         database: POSTGRESQL
