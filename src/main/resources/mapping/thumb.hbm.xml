@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping default-access="field">
+    <class mutable="true" name="com.hxline.thumbsservice.domain.Thumb" dynamic-update="true" table="TABLE_THUMBS">
+        <id column="THREAD_ID" name="threadId" />
+        <property column="THUMBS_UP" name="thumbsUp" type="int" />
+        <property column="THUMBS_DOWN" name="thumbsDown" type="int" />
+    </class>
+</hibernate-mapping>
