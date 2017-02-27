@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans  
+    xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xmlns:p="http://www.springframework.org/schema/p"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">  
+  
+  
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="org.postgresql.Driver" ></property>
+        <property name="url" value="jdbc:postgresql://ec2-54-225-66-44.compute-1.amazonaws.com:5432/d4jjodt6veq0dq?username=tjspnqyoeekrcu&amp;password=a0fafdfafeb2a31ac064a1cc85465b293a83a8ed581f997915aa2b8b8ed0be0a&amp;ssl=true&amp;sslfactory=org.postgresql.ssl.NonValidatingFactory" ></property>  
+        <property name="username" value="tjspnqyoeekrcu" ></property>
+        <property name="password" value="a0fafdfafeb2a31ac064a1cc85465b293a83a8ed581f997915aa2b8b8ed0be0a" ></property>
+    </bean>  
+<!--    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" ></property>
+        <property name="url" value="jdbc:mysql://localhost/thumbs" ></property>  
+        <property name="username" value="root" ></property>
+        <property name="password" value="" ></property>
+    </bean> -->
+      
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+          
+        <property name="mappingResources">  
+            <list>
+                <value>mapping/thumb.hbm.xml</value>
+            </list>  
+        </property>  
+          
+        <property name="hibernateProperties">
+            <props>  
+                <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>  
+                <!--<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>-->  
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.jdbc.batch_size">1000</prop>
+            </props>  
+        </property>  
+    </bean>  
+    
+    <bean id="thumbHibernate" class="com.hxline.thumbsservice.hibernate.ThumbHibernate">  
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+</beans>
