@@ -43,7 +43,7 @@ public class ThumbService implements ThumbInterface{
     @RequestMapping(value = "/getall", method = RequestMethod.GET)
     @HystrixCommand(
             fallbackMethod = "getAllFallback",
-            commandProperties = @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "15000")
+            commandProperties = @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "60000")
         )
     public ResponseEntity<List<Thumb>> getAll(){
         return new ResponseEntity(thumbHibernate().getAll(), HttpStatus.FOUND);
