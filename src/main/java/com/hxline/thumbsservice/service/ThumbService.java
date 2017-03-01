@@ -72,6 +72,11 @@ public class ThumbService implements ThumbInterface{
         return new ResponseEntity(null, HttpStatus.REQUEST_TIMEOUT);
     }
     
+    @RequestMapping(value = "/home", method = RequestMethod.GET)
+    public ResponseEntity<String> home(){
+            return new ResponseEntity("HOME", HttpStatus.FOUND);
+    }
+    
     private ThumbHibernate thumbHibernate(){
         Resource r = new ClassPathResource("application-context.xml");
         BeanFactory factory = new XmlBeanFactory(r);
