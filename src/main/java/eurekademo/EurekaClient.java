@@ -11,9 +11,7 @@ import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-@Configuration
 @EnableAutoConfiguration
-@EnableEurekaClient
 @EnableDiscoveryClient
 @EnableFeignClients
 @EnableCircuitBreaker
