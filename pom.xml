@@ -14,7 +14,8 @@
     <parent>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-starter-parent</artifactId>
-        <version>Brixton.RELEASE</version>
+        <version>Angel.SR6</version>
+        <relativePath />
     </parent>
 
     <dependencies>
