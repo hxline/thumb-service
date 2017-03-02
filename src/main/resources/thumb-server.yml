@@ -23,16 +23,16 @@ server:
 eureka:
   client:
     serviceUrl:
-#      defaultZone: http://admin:admin@localhost:8761/eureka/
-      #SERVER KANTOR
-      defaultZone: https://admin:admin@hxline-registry.herokuapp.com/eureka/
-#        defaultZone: http://localhost:1111/eureka/
+      #SERVER eureka https://username:password@appname.herokuapp.com
+      defaultZone: ${EUREKA_SERVER}/eureka/
   instance:
     instanceId: thumb-service:${spring.application.instance_id:${random.value}}
     statusPageUrlPath: ${management.context-path}/info
     healthCheckUrlPath: ${management.context-path}/health
 #    leaseRenewalIntervalInSeconds: 5   # DO NOT DO THIS IN PRODUCTION
 #    preferIpAddress: true
+#hostname address applikasi ini di heroku ex : hxline-service.herokuapp.com
+    hostname: ${DOMAIN_NAME}
     metadataMap:
       instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
 
