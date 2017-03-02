@@ -128,7 +128,7 @@
 					<appName>${heroku.appName}</appName>
 					<includeTarget>false</includeTarget>
 					<includes>
-						<include>target/${project.build.finalName}-${project.version}.jar</include>
+						<include>target/ThumbsService-1.0-SNAPSHOT.jar</include>
 					</includes>
 				</configuration>
 			</plugin>
