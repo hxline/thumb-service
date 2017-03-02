@@ -33,6 +33,7 @@ eureka:
 #    preferIpAddress: true
 #hostname address applikasi ini di heroku ex : hxline-service.herokuapp.com
     hostname: ${DOMAIN_NAME}
+    port: 80
     metadataMap:
       instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
 
