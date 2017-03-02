@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-starter-parent</artifactId>
-        <version>Brixton.RELEASE</version>
+        <version>Brixton.SR7</version>
     </parent>
 
     <dependencies>
@@ -123,7 +123,7 @@
 			<plugin>
 				<groupId>com.heroku.sdk</groupId>
 				<artifactId>heroku-maven-plugin</artifactId>
-				<version>0.3.4</version>
+				<version>1.1.4</version>
 				<configuration>
 					<appName>${heroku.appName}</appName>
 					<includeTarget>false</includeTarget>
