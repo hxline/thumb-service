@@ -31,8 +31,8 @@ eureka:
     instanceId: thumb-service:${spring.application.instance_id:${random.value}}
     statusPageUrlPath: ${management.context-path}/info
     healthCheckUrlPath: ${management.context-path}/health
-    leaseRenewalIntervalInSeconds: 5   # DO NOT DO THIS IN PRODUCTION
-    preferIpAddress: true
+#    leaseRenewalIntervalInSeconds: 5   # DO NOT DO THIS IN PRODUCTION
+#    preferIpAddress: true
     metadataMap:
       instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
 
@@ -44,7 +44,3 @@ eureka:
 #     NOTE-2: Syntax ${x:${y}} = use $x if set, otherwise use $y
 #   metadataMap:
 #     instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}}
-      
-
-
-
