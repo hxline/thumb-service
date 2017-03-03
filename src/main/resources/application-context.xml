@@ -9,9 +9,9 @@
   <!--heroku postgresql-->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
         <property name="driverClassName" value="org.postgresql.Driver" ></property>
-        <property name="url" value="jdbc:postgresql://ec2-54-243-185-99.compute-1.amazonaws.com:5432/d1s6st7d9dos12?username=fayxlndhpuacsx&amp;password=bb584d81a5523dbe83709e5f24936982bd2d81f0b004aa656bc7521659896e23&amp;ssl=true&amp;sslfactory=org.postgresql.ssl.NonValidatingFactory" ></property>  
-        <property name="username" value="fayxlndhpuacsx" ></property>
-        <property name="password" value="bb584d81a5523dbe83709e5f24936982bd2d81f0b004aa656bc7521659896e23" ></property>
+        <property name="url" value="jdbc:postgresql://ec2-54-225-119-223.compute-1.amazonaws.com:5432/dbdnd8l4eum13o?username=nirybbpjvxcyge&amp;password=230e313d3130a1622374451ca2b686dbdb436de3d58c2e3db8a7bf092517093f&amp;ssl=true&amp;sslfactory=org.postgresql.ssl.NonValidatingFactory" ></property>  
+        <property name="username" value="nirybbpjvxcyge" ></property>
+        <property name="password" value="230e313d3130a1622374451ca2b686dbdb436de3d58c2e3db8a7bf092517093f" ></property>
     </bean>  
     
 <!--    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
