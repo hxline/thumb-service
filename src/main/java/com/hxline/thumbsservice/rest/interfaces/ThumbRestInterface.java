@@ -1,4 +1,4 @@
-package com.hxline.thumbsservice.service.interfaced;
+package com.hxline.thumbsservice.rest.interfaces;
 
 import com.hxline.thumbsservice.domain.Thumb;
 import java.util.List;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @author Handoyo
  */
 @FeignClient("thumb-service")
-public interface ThumbInterface {
+public interface ThumbRestInterface {
     @RequestMapping(value = "/save", method = RequestMethod.PUT)
     public ResponseEntity<Void> save(@RequestBody Thumb thumb);
     

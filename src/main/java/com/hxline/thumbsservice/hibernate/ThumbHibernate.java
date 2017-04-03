@@ -1,49 +1,32 @@
 package com.hxline.thumbsservice.hibernate;
 
+import com.hxline.thumbsservice.component.HibernateRepository;
 import com.hxline.thumbsservice.domain.Thumb;
+import com.hxline.thumbsservice.hibernate.interfaces.ThumbHibernateInterface;
+import java.util.ArrayList;
 import java.util.List;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 /**
  *
  * @author Handoyo
  */
-public class ThumbHibernate {
+@Repository
+@Transactional
+public class ThumbHibernate extends HibernateRepository implements ThumbHibernateInterface{
 
-    private SessionFactory sessionFactory;
-
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
+    @Override
     public void save(Thumb thumb) {
-        Session session = this.sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        session.saveOrUpdate(thumb);
-        transaction.commit();
-        session.close();
-        closeConnection();
+        getSession().saveOrUpdate(thumb);
     }
 
+    @Override
     public List<Thumb> getAll() {
-        Session session = this.sessionFactory.openSession();
-        List<Thumb> thumbs = session.createQuery("FROM Thumb").list();
-        session.close();
-        closeConnection();
-        return thumbs;
+        return new ArrayList(getSession().createQuery("FROM Thumb").list());
     }
 
+    @Override
     public Thumb get(String id) {
-        Session session = this.sessionFactory.openSession();
-        Thumb thumb = (Thumb) session.get(Thumb.class, id);
-        session.close();
-        closeConnection();
-        return thumb;
-    }
-    
-    public void closeConnection() {
-        sessionFactory.close();
+        return getSession().get(Thumb.class, id);
     }
 }

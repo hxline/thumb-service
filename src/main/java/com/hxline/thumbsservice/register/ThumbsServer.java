@@ -1,11 +1,6 @@
 package com.hxline.thumbsservice.register;
 
-import com.hxline.thumbsservice.service.ThumbService;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
-import java.util.List;
-import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.hxline.thumbsservice.rest.ThumbRest;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
@@ -13,6 +8,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ImportResource;
 /**
  *
  * @author Handoyo
@@ -22,7 +18,8 @@ import org.springframework.context.annotation.Import;
 @EnableFeignClients
 @EnableCircuitBreaker
 @EnableHystrix
-@Import(ThumbService.class)
+@Import(ThumbRest.class)
+@ImportResource({"classpath*:thumb-context.xml"})
 public class ThumbsServer {
     
     public static void main(String[] args) {
