@@ -22,9 +22,10 @@
     
     <!--RabbitMQ Connection and instance id-->
     <bean id="connectionFactory" class="com.rabbitmq.client.ConnectionFactory">
-        <property name="host" value="${rabbitmq.host}" />
+<!--        <property name="host" value="${rabbitmq.host}" />
         <property name="username" value="${rabbitmq.username}" />
-        <property name="password" value="${rabbitmq.password}" />
+        <property name="password" value="${rabbitmq.password}" />-->
+        <property name="uri" value="${rabbitmq.password}" />
     </bean>
     
     <bean id="consumerConnection" class="com.hxline.thumbsservice.register.ThumbsServer">
