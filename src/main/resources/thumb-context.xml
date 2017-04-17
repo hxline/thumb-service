@@ -70,8 +70,4 @@
     <bean id="thumbServices" class="com.hxline.thumbsservice.services.ThumbServices">
         <property name="thumbHibernate" ref="thumbHibernate" />
     </bean>
-    
-<!--    <bean id="readCon" class="com.hxline.thumbsservice.component.ReadConfig">
-        <property name="serviceName" value="${eureka.instance.instanceId}" />
-    </bean>-->
 </beans>

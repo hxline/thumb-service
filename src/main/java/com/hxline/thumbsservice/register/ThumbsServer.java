@@ -37,16 +37,13 @@ public class ThumbsServer {
     private static ConnectionFactory connectionFactory;
 
 //    @Value("${eureka.instance.instanceId}")
-//    public static void setThumbServices(ThumbServicesInterface thumbServices) {
-//        ThumbsServer.thumbServices = thumbServices;
-//    }
+    
+    public static void setThumbServices(ThumbServicesInterface thumbServices) {
+        ThumbsServer.thumbServices = thumbServices;
+    }
 
     public static void setConnectionFactory(ConnectionFactory connectionFactory) {
         ThumbsServer.connectionFactory = connectionFactory;
-    }
-
-    public static void setServiceInstance(String serviceInstance) {
-        ThumbsServer.serviceInstance = serviceInstance;
     }
 
     public static void main(String[] args) {
