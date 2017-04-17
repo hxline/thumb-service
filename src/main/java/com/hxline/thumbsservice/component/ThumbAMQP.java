@@ -14,8 +14,8 @@ import org.springframework.beans.factory.annotation.Value;
  */
 public class ThumbAMQP {
 
-//    @Value("${eureka.instance.instanceId}")
-    private String serviceInstance = "thumb1";
+    @Value("${eureka.instance.instanceId}")
+    private String serviceInstance;
     private ConnectionFactory connectionFactory;
     private BasicProperties properties = new BasicProperties().builder()
             .expiration("1000000") //message otomatis di hapus setelah 16.6 menit
@@ -30,7 +30,7 @@ public class ThumbAMQP {
         try {
             ObjectMapper mapper = new ObjectMapper();
             Connection connection = connectionFactory.newConnection();
-
+            System.out.println("OYOYOY"+serviceInstance);
             Channel channel = connection.createChannel();
              
             channel.basicPublish("fanout.thumb", "", properties, mapper.writeValueAsString(thumb).getBytes());

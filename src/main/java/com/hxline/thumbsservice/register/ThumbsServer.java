@@ -32,12 +32,15 @@ import org.springframework.context.annotation.ImportResource;
 @ImportResource({"classpath*:thumb-context.xml"})
 public class ThumbsServer {
 
-    private static String serviceInstance = "thumb1";
+    private static String serviceInstance;
     private static ThumbServicesInterface thumbServices;
     private static ConnectionFactory connectionFactory;
 
-//    @Value("${eureka.instance.instanceId}")
-    
+    @Value("${eureka.instance.instanceId}")
+    public static void setServiceInstance(String serviceInstance) {
+        ThumbsServer.serviceInstance = serviceInstance;
+    }
+
     public static void setThumbServices(ThumbServicesInterface thumbServices) {
         ThumbsServer.thumbServices = thumbServices;
     }
