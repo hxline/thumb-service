@@ -37,14 +37,14 @@
     
     <bean id="thumbsServer" class="com.hxline.thumbsservice.register.ThumbsServer">
         <property name="serviceInstance">
-            <bean factory-bean="eurekaInstance" factory-method="getServiceId" />
+            <bean factory-bean="eurekaInstance" factory-method="getHost" />
         </property>
     </bean>
     
     <bean id="publisherConnection" class="com.hxline.thumbsservice.component.ThumbAMQP">
         <property name="connectionFactory" ref="connectionFactory"/>
         <property name="serviceInstance">
-            <bean factory-bean="eurekaInstance" factory-method="getServiceId" />
+            <bean factory-bean="eurekaInstance" factory-method="getHost" />
         </property>
     </bean>
     

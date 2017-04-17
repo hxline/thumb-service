@@ -16,4 +16,8 @@ public class EurekaInstance extends EurekaInstanceConfigBean{
     public String getServiceId(){
         return getInstanceId();
     }
+    
+    public String getHost(){
+        return getHostname();
+    }
 }
