@@ -25,6 +25,11 @@ public class ThumbServices implements ThumbServicesInterface{
     }
 
     @Override
+    public void saveQueue(Thumb thumb) {
+        thumbHibernate.saveQueue(thumb);
+    }
+
+    @Override
     public List<Thumb> getAll() {
         return thumbHibernate.getAll();
     }

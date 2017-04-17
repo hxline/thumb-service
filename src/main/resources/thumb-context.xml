@@ -9,13 +9,31 @@
                            http://www.springframework.org/schema/tx/spring-tx.xsd
                            http://www.springframework.org/schema/jdbc 
                            http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
-
-    <bean id="hibernateProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    
+    <!--properties location-->
+    <bean id="properties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
                 <value>jdbc.properties</value>
+                <value>mbc.properties</value>
             </list>
         </property>
+    </bean>
+    
+    <!--RabbitMQ Connection-->
+    <bean id="connectionFactory" class="com.rabbitmq.client.ConnectionFactory">
+        <property name="host" value="${rabbitmq.host}" />
+        <property name="username" value="${rabbitmq.username}" />
+        <property name="password" value="${rabbitmq.password}" />
+    </bean>
+    
+    <bean id="consumerConnection" class="com.hxline.thumbsservice.register.ThumbsServer">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="thumbServices" ref="thumbServices" />
+    </bean>
+    
+    <bean id="publisherConnection" class="com.hxline.thumbsservice.component.ThumbAMQP">
+        <property name="connectionFactory" ref="connectionFactory"/>
     </bean>
     
     <!--For DataSource in local -->
@@ -45,10 +63,15 @@
     <!-- Repository Handler -->
     <bean id="thumbHibernate" class="com.hxline.thumbsservice.hibernate.ThumbHibernate">
         <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="thumbAMQP" ref="publisherConnection"/>
     </bean>
     
     <!--Services Handler-->
     <bean id="thumbServices" class="com.hxline.thumbsservice.services.ThumbServices">
         <property name="thumbHibernate" ref="thumbHibernate" />
     </bean>
+    
+<!--    <bean id="readCon" class="com.hxline.thumbsservice.component.ReadConfig">
+        <property name="serviceName" value="${eureka.instance.instanceId}" />
+    </bean>-->
 </beans>

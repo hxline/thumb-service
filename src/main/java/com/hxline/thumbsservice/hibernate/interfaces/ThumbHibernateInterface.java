@@ -9,6 +9,8 @@ import java.util.List;
  */
 public interface ThumbHibernateInterface {
     public void save(Thumb thumb);
+    
+    public void saveQueue(Thumb thumb);
 
     public List<Thumb> getAll();
 

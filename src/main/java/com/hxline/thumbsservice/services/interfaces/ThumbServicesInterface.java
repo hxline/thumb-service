@@ -10,6 +10,8 @@ import java.util.List;
 public interface ThumbServicesInterface {
 
     public void save(Thumb thumb);
+    
+    public void saveQueue(Thumb thumb);
 
     public List<Thumb> getAll();
 
