@@ -14,8 +14,8 @@ import org.springframework.beans.factory.annotation.Value;
  */
 public class ThumbAMQP {
 
-    @Value("${eureka.instance.instanceId}")
-    private String serviceInstance;
+//    @Value("${eureka.instance.instanceId}")
+    private String serviceInstance = "thumb1";
     private ConnectionFactory connectionFactory;
     private BasicProperties properties = new BasicProperties().builder()
             .expiration("1000000") //message otomatis di hapus setelah 16.6 menit
