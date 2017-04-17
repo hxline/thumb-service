@@ -24,8 +24,8 @@ eureka:
   client:
     serviceUrl:
       #SERVER eureka https://username:password@appname.herokuapp.com
-#      defaultZone: ${EUREKA_SERVER}/eureka/
-      defaultZone: http://admin:admin@192.168.40.1:8761/eureka/
+      defaultZone: ${EUREKA_SERVER}/eureka/
+#      defaultZone: http://admin:admin@192.168.40.1:8761/eureka/
   instance:
     instanceId: thumb-service:${spring.application.instance_id:${random.value}}
     statusPageUrlPath: ${management.context-path}/info
@@ -33,7 +33,7 @@ eureka:
 #    leaseRenewalIntervalInSeconds: 5   # DO NOT DO THIS IN PRODUCTION
 #    preferIpAddress: true
 #hostname address applikasi ini di heroku ex : hxline-service.herokuapp.com
-#    hostname: ${DOMAIN_NAME}
+    hostname: ${DOMAIN_NAME}
     nonSecurePort: 80
     metadataMap:
       instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
@@ -57,5 +57,3 @@ eureka:
 ##java.io.tmpdir = C:\Users\user\AppData\Local\Temp\
 ##bisa juga di set environment TEMP ke directory lain seperti C:\TEMP\
 #  file: ${java.io.tmpdir}/thumb-service.log
-info:
-    gateway: abcdefg
