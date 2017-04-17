@@ -20,7 +20,7 @@
         </property>
     </bean>
     
-    <!--RabbitMQ Connection-->
+    <!--RabbitMQ Connection and instance id-->
     <bean id="connectionFactory" class="com.rabbitmq.client.ConnectionFactory">
         <property name="host" value="${rabbitmq.host}" />
         <property name="username" value="${rabbitmq.username}" />
@@ -32,8 +32,19 @@
         <property name="thumbServices" ref="thumbServices" />
     </bean>
     
+    <bean id="eurekaInstance" class="com.hxline.thumbsservice.component.EurekaInstance" />
+    
+    <bean id="thumbsServer" class="com.hxline.thumbsservice.register.ThumbsServer">
+        <property name="serviceInstance">
+            <bean factory-bean="eurekaInstance" factory-method="getServiceId" />
+        </property>
+    </bean>
+    
     <bean id="publisherConnection" class="com.hxline.thumbsservice.component.ThumbAMQP">
         <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="serviceInstance">
+            <bean factory-bean="eurekaInstance" factory-method="getServiceId" />
+        </property>
     </bean>
     
     <!--For DataSource in local -->

@@ -9,7 +9,6 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.QueueingConsumer;
 import com.rabbitmq.client.QueueingConsumer.Delivery;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
@@ -30,15 +29,18 @@ import org.springframework.context.annotation.ImportResource;
 @EnableHystrix
 @Import(ThumbRest.class)
 @ImportResource({"classpath*:thumb-context.xml"})
-public class ThumbsServer {
+public class ThumbsServer{
 
     private static String serviceInstance;
     private static ThumbServicesInterface thumbServices;
     private static ConnectionFactory connectionFactory;
 
-    @Value("${eureka.instance.instanceId}")
     public static void setServiceInstance(String serviceInstance) {
         ThumbsServer.serviceInstance = serviceInstance;
+    }
+
+    public String getServiceInstance() {
+        return serviceInstance;
     }
 
     public static void setThumbServices(ThumbServicesInterface thumbServices) {
@@ -52,9 +54,7 @@ public class ThumbsServer {
     public static void main(String[] args) {
         try {
             System.setProperty("spring.config.name", "thumb-server");
-
             SpringApplication.run(ThumbsServer.class, args);
-            //message consuming
             String queueName = "Queue-" + serviceInstance;
             Connection connection = connectionFactory.newConnection();
 
@@ -81,6 +81,7 @@ public class ThumbsServer {
                                     System.out.println("Message Delivered.");
                                 }
                             }
+                            
                         } else {
                             channel.basicAck(deliveryTag, false);
                         }
