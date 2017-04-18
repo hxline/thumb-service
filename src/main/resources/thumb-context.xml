@@ -27,7 +27,7 @@
         <property name="password" value="${rabbitmq.password}" />-->
         <property name="uri" value="${rabbitmq.uri}" />
         <property name="requestedHeartbeat" value="${rabbitmq.requestedHeartbeat}" />
-        <property name="connectionTimeout " value="${rabbitmq.connectionTimeout}" />
+        <property name="connectionTimeout" value="${rabbitmq.connectionTimeout}" />
     </bean>
     
     <bean id="consumerConnection" class="com.hxline.thumbsservice.register.ThumbsServer">
