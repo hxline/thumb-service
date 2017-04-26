@@ -2,6 +2,7 @@ package com.hxline.thumbsservice.register;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hxline.thumbsservice.domain.Thumb;
+import com.hxline.thumbsservice.messaging.consumer.ThumbConsumer;
 import com.hxline.thumbsservice.rest.ThumbRest;
 import com.hxline.thumbsservice.services.interfaces.ThumbServicesInterface;
 import com.rabbitmq.client.Channel;
@@ -27,85 +28,23 @@ import org.springframework.context.annotation.ImportResource;
 @EnableFeignClients
 @EnableCircuitBreaker
 @EnableHystrix
-@Import(ThumbRest.class)
+@Import({ThumbRest.class})
 @ImportResource({"classpath*:thumb-context.xml"})
 public class ThumbsServer{
 
-    private static String serviceInstance;
-    private static ThumbServicesInterface thumbServices;
-    private static ConnectionFactory connectionFactory;
+    private static ThumbConsumer thumbConsumer;
 
-    public static void setServiceInstance(String serviceInstance) {
-        ThumbsServer.serviceInstance = serviceInstance;
+    public static void setThumbConsumer(ThumbConsumer thumbConsumer) {
+        ThumbsServer.thumbConsumer = thumbConsumer;
     }
-
-    public String getServiceInstance() {
-        return serviceInstance;
-    }
-
-    public static void setThumbServices(ThumbServicesInterface thumbServices) {
-        ThumbsServer.thumbServices = thumbServices;
-    }
-
-    public static void setConnectionFactory(ConnectionFactory connectionFactory) {
-        ThumbsServer.connectionFactory = connectionFactory;
-    }
-
+    
     public static void main(String[] args) {
         try {
             System.setProperty("spring.config.name", "thumb-server");
             SpringApplication.run(ThumbsServer.class, args);
-            String queueName = "Queue-" + serviceInstance;
-            Connection connection = connectionFactory.newConnection();
-
-            Channel channel = connection.createChannel();
-            QueueingConsumer consumer = new QueueingConsumer(channel);
-            channel.queueDeclare(queueName, true, false, false, null);
-            channel.queueBind("", "fanout.thumb", "");
-            channel.basicConsume(queueName, consumer);
-
-            while (true) {
-                try {
-                    Delivery delivery = consumer.nextDelivery();
-                    long deliveryTag = delivery.getEnvelope().getDeliveryTag();
-                    if (delivery == null) {
-//                        break;
-                    } else {
-                        //hanya mengambil pesan dengan messageId selain miliknya sendiri
-                        if (!delivery.getProperties().getType().equalsIgnoreCase(serviceInstance)) {
-                            if (delivery.getEnvelope().isRedeliver()) {
-                                System.out.println("Message has been deliver before.");
-                            } else {
-                                if (save(delivery)) {
-                                    channel.basicAck(deliveryTag, false);
-                                    System.out.println("Message Delivered.");
-                                }
-                            }
-                            
-                        } else {
-                            channel.basicAck(deliveryTag, false);
-                        }
-                    }
-                } catch (Exception e) {
-                    System.out.println(e);
-                    break;
-                }
-            }
-
-            channel.close();
-            connection.close();
+            thumbConsumer.consuming();
         } catch (Exception e) {
-        }
-    }
-
-    private static Boolean save(Delivery delivery) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            String msg = new String(delivery.getBody(), "UTF-8");
-            thumbServices.saveQueue(mapper.readValue(msg, Thumb.class));
-            return true;
-        } catch (Exception e) {
-            return false;
+            System.err.println(e);
         }
     }
 }

@@ -10,6 +10,9 @@
                            http://www.springframework.org/schema/jdbc 
                            http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
     
+    <!--Eureka Instance-->
+    <bean id="eurekaInstance" class="com.hxline.thumbsservice.component.EurekaInstance" />
+    
     <!--properties location-->
     <bean id="properties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
@@ -30,20 +33,19 @@
         <property name="connectionTimeout" value="${rabbitmq.connectionTimeout}" />
     </bean>
     
-    <bean id="consumerConnection" class="com.hxline.thumbsservice.register.ThumbsServer">
-        <property name="connectionFactory" ref="connectionFactory"/>
-        <property name="thumbServices" ref="thumbServices" />
+    <bean id="thumbsServer" class="com.hxline.thumbsservice.register.ThumbsServer">
+        <property name="thumbConsumer" ref="thumbConsumer" />
     </bean>
     
-    <bean id="eurekaInstance" class="com.hxline.thumbsservice.component.EurekaInstance" />
-    
-    <bean id="thumbsServer" class="com.hxline.thumbsservice.register.ThumbsServer">
+    <bean id="thumbConsumer" class="com.hxline.thumbsservice.messaging.consumer.ThumbConsumer">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="thumbServices" ref="thumbServices" />
         <property name="serviceInstance">
             <bean factory-bean="eurekaInstance" factory-method="getHost" />
         </property>
     </bean>
     
-    <bean id="publisherConnection" class="com.hxline.thumbsservice.component.ThumbAMQP">
+    <bean id="thumbPublisher" class="com.hxline.thumbsservice.messaging.publisher.ThumbPublisher">
         <property name="connectionFactory" ref="connectionFactory"/>
         <property name="serviceInstance">
             <bean factory-bean="eurekaInstance" factory-method="getHost" />
@@ -77,7 +79,7 @@
     <!-- Repository Handler -->
     <bean id="thumbHibernate" class="com.hxline.thumbsservice.hibernate.ThumbHibernate">
         <property name="sessionFactory" ref="sessionFactory"/>
-        <property name="thumbAMQP" ref="publisherConnection"/>
+        <property name="thumbPublisher" ref="thumbPublisher"/>
     </bean>
     
     <!--Services Handler-->

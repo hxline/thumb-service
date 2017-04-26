@@ -1,7 +1,7 @@
 package com.hxline.thumbsservice.hibernate;
 
 import com.hxline.thumbsservice.component.HibernateRepository;
-import com.hxline.thumbsservice.component.ThumbAMQP;
+import com.hxline.thumbsservice.messaging.publisher.ThumbPublisher;
 import com.hxline.thumbsservice.domain.Thumb;
 import com.hxline.thumbsservice.hibernate.interfaces.ThumbHibernateInterface;
 import java.util.ArrayList;
@@ -16,16 +16,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ThumbHibernate extends HibernateRepository implements ThumbHibernateInterface{
 
-    private ThumbAMQP thumbAMQP;
+    private ThumbPublisher thumbPublisher;
 
-    public void setThumbAMQP(ThumbAMQP thumbAMQP) {
-        this.thumbAMQP = thumbAMQP;
+    public void setThumbPublisher(ThumbPublisher thumbPublisher) {
+        this.thumbPublisher = thumbPublisher;
     }
     
     @Override
     public void save(Thumb thumb) {
         getSession().saveOrUpdate(thumb);
-        thumbAMQP.send(thumb);
+        thumbPublisher.send(thumb);
     }
     
     @Override
