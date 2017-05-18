@@ -1,4 +1,4 @@
-package com.hxline.thumbsservice.messaging.consumer;
+package com.hxline.thumbsservice.messaging.subscriber;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hxline.thumbsservice.domain.Thumb;
@@ -12,7 +12,7 @@ import com.rabbitmq.client.QueueingConsumer;
  *
  * @author Handoyo
  */
-public class ThumbConsumer {
+public class ThumbSubscriber {
     
     private String serviceInstance;
     private ThumbServicesInterface thumbServices;
@@ -69,7 +69,7 @@ public class ThumbConsumer {
                         }
                     }
                 } catch (Exception e) {
-                    System.err.println(e);
+                    e.printStackTrace();
                     break;
                 }
             }
@@ -77,7 +77,7 @@ public class ThumbConsumer {
             channel.close();
             connection.close();
         } catch (Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
         }
     }
     
@@ -88,7 +88,7 @@ public class ThumbConsumer {
             thumbServices.saveQueue(mapper.readValue(msg, Thumb.class));
             return true;
         } catch (Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
             return false;
         }
     }

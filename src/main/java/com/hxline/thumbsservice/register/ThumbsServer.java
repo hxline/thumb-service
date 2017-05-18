@@ -1,15 +1,9 @@
 package com.hxline.thumbsservice.register;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hxline.thumbsservice.domain.Thumb;
-import com.hxline.thumbsservice.messaging.consumer.ThumbConsumer;
+import com.hxline.thumbsservice.config.CertificateConfiguration;
+import com.hxline.thumbsservice.messaging.subscriber.ThumbKafkaSubscriber;
+import com.hxline.thumbsservice.messaging.subscriber.ThumbSubscriber;
 import com.hxline.thumbsservice.rest.ThumbRest;
-import com.hxline.thumbsservice.services.interfaces.ThumbServicesInterface;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.QueueingConsumer;
-import com.rabbitmq.client.QueueingConsumer.Delivery;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
@@ -30,21 +24,43 @@ import org.springframework.context.annotation.ImportResource;
 @EnableHystrix
 @Import({ThumbRest.class})
 @ImportResource({"classpath*:thumb-context.xml"})
-public class ThumbsServer{
+public class ThumbsServer {
 
-    private static ThumbConsumer thumbConsumer;
+    //Kafka
+    private static CertificateConfiguration certificateConfiguration;
+    private static ThumbKafkaSubscriber thumbKafkaSubscriber;
 
-    public static void setThumbConsumer(ThumbConsumer thumbConsumer) {
-        ThumbsServer.thumbConsumer = thumbConsumer;
+    public static void setCertificateConfiguration(CertificateConfiguration certificateConfiguration) {
+        ThumbsServer.certificateConfiguration = certificateConfiguration;
     }
+
+    public static void setThumbKafkaSubscriber(ThumbKafkaSubscriber thumbKafkaSubscriber) {
+        ThumbsServer.thumbKafkaSubscriber = thumbKafkaSubscriber;
+    }
+    //end Kafka
+    
+    //RabbitMQ
+    private static ThumbSubscriber thumbSubscriber;
+
+    public static void setThumbSubscriber(ThumbSubscriber thumbSubscriber) {
+        ThumbsServer.thumbSubscriber = thumbSubscriber;
+    }
+    //end RabbitMQ
     
     public static void main(String[] args) {
         try {
             System.setProperty("spring.config.name", "thumb-server");
             SpringApplication.run(ThumbsServer.class, args);
-            thumbConsumer.consuming();
+            //RabbitMQ
+//            thumbSubscriber.consuming();
+            //end RabbitMQ
+            
+            //Kafka
+            certificateConfiguration.create();
+            thumbKafkaSubscriber.consuming();
+            //end Kafka
         } catch (Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
         }
     }
 }

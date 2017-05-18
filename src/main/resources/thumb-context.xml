@@ -24,20 +24,20 @@
     </bean>
     
     <!--RabbitMQ Connection and instance id-->
-    <bean id="connectionFactory" class="com.rabbitmq.client.ConnectionFactory">
-<!--        <property name="host" value="${rabbitmq.host}" />
+<!--    <bean id="connectionFactory" class="com.rabbitmq.client.ConnectionFactory">
+        <property name="host" value="${rabbitmq.host}" />
         <property name="username" value="${rabbitmq.username}" />
-        <property name="password" value="${rabbitmq.password}" />-->
+        <property name="password" value="${rabbitmq.password}" />
         <property name="uri" value="${rabbitmq.uri}" />
         <property name="requestedHeartbeat" value="${rabbitmq.requestedHeartbeat}" />
         <property name="connectionTimeout" value="${rabbitmq.connectionTimeout}" />
     </bean>
     
     <bean id="thumbsServer" class="com.hxline.thumbsservice.register.ThumbsServer">
-        <property name="thumbConsumer" ref="thumbConsumer" />
+        <property name="thumbSubscriber" ref="thumbSubscriber" />
     </bean>
     
-    <bean id="thumbConsumer" class="com.hxline.thumbsservice.messaging.consumer.ThumbConsumer">
+    <bean id="thumbSubscriber" class="com.hxline.thumbsservice.messaging.subscriber.ThumbSubscriber">
         <property name="connectionFactory" ref="connectionFactory"/>
         <property name="thumbServices" ref="thumbServices" />
         <property name="serviceInstance">
@@ -47,6 +47,28 @@
     
     <bean id="thumbPublisher" class="com.hxline.thumbsservice.messaging.publisher.ThumbPublisher">
         <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="serviceInstance">
+            <bean factory-bean="eurekaInstance" factory-method="getHost" />
+        </property>
+    </bean>-->
+    
+    <!--Kafka Connection and instance id-->
+    <bean id="certificateConfiguration" class="com.hxline.thumbsservice.config.CertificateConfiguration" />
+    
+    <bean id="thumbsKafkaServer" class="com.hxline.thumbsservice.register.ThumbsServer">
+        <property name="thumbKafkaSubscriber" ref="thumbKafkaSubscriber" />
+        <property name="certificateConfiguration" ref="certificateConfiguration" />
+    </bean>
+    
+    <!--Ga bisa digunain kalau pakai thread, karena dianggap satu object -->
+<!--    <bean id="thumbKafkaPublisher" class="com.hxline.thumbsservice.messaging.publisher.ThumbKafkaPublisher">
+        <property name="serviceInstance">
+            <bean factory-bean="eurekaInstance" factory-method="getHost" />
+        </property>
+    </bean>-->
+    
+    <bean id="thumbKafkaSubscriber" class="com.hxline.thumbsservice.messaging.subscriber.ThumbKafkaSubscriber">
+        <property name="thumbServices" ref="thumbServices" />
         <property name="serviceInstance">
             <bean factory-bean="eurekaInstance" factory-method="getHost" />
         </property>
@@ -79,7 +101,11 @@
     <!-- Repository Handler -->
     <bean id="thumbHibernate" class="com.hxline.thumbsservice.hibernate.ThumbHibernate">
         <property name="sessionFactory" ref="sessionFactory"/>
-        <property name="thumbPublisher" ref="thumbPublisher"/>
+        <property name="serviceInstance">
+            <bean factory-bean="eurekaInstance" factory-method="getHost" />
+        </property>
+        <!--<property name="thumbKafkaPublisher" ref="thumbKafkaPublisher"/>-->
+        <!--<property name="thumbPublisher" ref="thumbPublisher"/>-->
     </bean>
     
     <!--Services Handler-->
