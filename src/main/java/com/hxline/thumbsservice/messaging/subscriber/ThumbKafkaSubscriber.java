@@ -40,9 +40,9 @@ public class ThumbKafkaSubscriber {
             props.put("key.deserializer", org.apache.kafka.common.serialization.StringDeserializer.class.getName());
             props.put("value.deserializer", com.hxline.thumbsservice.domain.serialization.ThumbDeserializer.class.getName());
             props.put("security.protocol", "SSL");
-            props.put("ssl.truststore.location", "/tmp/truststore.jks");
+            props.put("ssl.truststore.location", "truststore.jks");
             props.put("ssl.truststore.password", "123qweasd");
-            props.put("ssl.keystore.location", "/tmp/keystore.jks");
+            props.put("ssl.keystore.location", "keystore.jks");
             props.put("ssl.keystore.password", "123qweasd");
             props.put("ssl.keypassword", "123qweasd");
 

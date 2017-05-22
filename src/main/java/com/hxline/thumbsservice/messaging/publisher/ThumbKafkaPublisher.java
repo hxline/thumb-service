@@ -33,9 +33,9 @@ public class ThumbKafkaPublisher extends Thread {
             props.put("key.serializer", org.apache.kafka.common.serialization.StringSerializer.class.getName());
             props.put("value.serializer", com.hxline.thumbsservice.domain.serialization.ThumbSerializer.class.getName());
             props.put("security.protocol", "SSL");
-            props.put("ssl.truststore.location", "/tmp/truststore.jks");
+            props.put("ssl.truststore.location", "truststore.jks");
             props.put("ssl.truststore.password", "123qweasd");
-            props.put("ssl.keystore.location", "/tmp/keystore.jks");
+            props.put("ssl.keystore.location", "keystore.jks");
             props.put("ssl.keystore.password", "123qweasd");
             props.put("ssl.keypassword", "123qweasd");
             
