@@ -1,7 +1,9 @@
 package com.hxline.thumbsservice.config;
 
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
@@ -13,7 +15,7 @@ public class CertificateConfiguration {
 
     public void create() {
         try {
-            PrintWriter caWriter = new PrintWriter("/tmp/ca.pem", "UTF-8");
+            PrintWriter caWriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream("ca.pem"), "UTF-8"));
             String ca = "-----BEGIN CERTIFICATE-----\n"
                     + "MIIC/TCCAeWgAwIBAgIJAInMkmuFOue3MA0GCSqGSIb3DQEBCwUAMBUxEzARBgNV\n"
                     + "BAMMCnN0ZWFtZXIgQ0EwHhcNMTcwMzIwMTAxNDQ3WhcNMjcwMzE4MTAxNDQ3WjAV\n"
@@ -36,7 +38,7 @@ public class CertificateConfiguration {
             caWriter.println(ca);
             caWriter.close();
 
-            PrintWriter certWriter = new PrintWriter("/tmp/cert.pem", "UTF-8");
+            PrintWriter certWriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream("cert.pem"), "UTF-8"));
             String cert = "-----BEGIN CERTIFICATE-----\n"
                     + "MIICoDCCAYgCCQDW0wSw88/hMjANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDDApz\n"
                     + "dGVhbWVyIENBMB4XDTE3MDUwOTA2NDk1OFoXDTI3MDUwNzA2NDk1OFowDzENMAsG\n"
@@ -57,7 +59,7 @@ public class CertificateConfiguration {
             certWriter.println(cert);
             certWriter.close();
 
-            PrintWriter keyWriter = new PrintWriter("/tmp/key.pem", "UTF-8");
+            PrintWriter keyWriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream("key.pem"), "UTF-8"));
             String privateKey = "-----BEGIN PRIVATE KEY-----\n"
                     + "MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQC6Zxp87VJOeH2M\n"
                     + "CyduKa+r52uAwxeEMYOuPdqhz2yZMeBohfDXl5wlnbq4+haTDCR9u3zXy6/nMZcN\n"
@@ -90,13 +92,13 @@ public class CertificateConfiguration {
             keyWriter.close();
 
             Runtime r = Runtime.getRuntime();
-            Process p = r.exec("openssl pkcs12 -export -password pass:123qweasd -out /tmp/store.pkcs12 -inkey /tmp/key.pem -certfile /tmp/ca.pem -in /tmp/cert.pem -caname 'CA Root' -name client");
+            Process p = r.exec("openssl pkcs12 -export -password pass:123qweasd -out store.pkcs12 -inkey key.pem -certfile ca.pem -in cert.pem -caname 'CA Root' -name client");
             p.waitFor();
 
-            p = r.exec("keytool -importkeystore -noprompt -srckeystore /tmp/store.pkcs12 -destkeystore /tmp/keystore.jks -srcstoretype pkcs12 -srcstorepass 123qweasd -srckeypass 123qweasd -destkeypass 123qweasd -deststorepass 123qweasd -alias client");
+            p = r.exec("keytool -importkeystore -noprompt -srckeystore store.pkcs12 -destkeystore keystore.jks -srcstoretype pkcs12 -srcstorepass 123qweasd -srckeypass 123qweasd -destkeypass 123qweasd -deststorepass 123qweasd -alias client");
             p.waitFor();
 
-            p = r.exec("keytool -noprompt -keystore /tmp/truststore.jks -alias CARoot -import -file /tmp/ca.pem -storepass 123qweasd");
+            p = r.exec("keytool -noprompt -keystore truststore.jks -alias CARoot -import -file ca.pem -storepass 123qweasd");
             p.waitFor();
 
         } catch (FileNotFoundException e) {
