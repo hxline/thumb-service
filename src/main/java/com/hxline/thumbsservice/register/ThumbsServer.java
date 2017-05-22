@@ -52,11 +52,11 @@ public class ThumbsServer {
             System.setProperty("spring.config.name", "thumb-server");
             SpringApplication.run(ThumbsServer.class, args);
             //RabbitMQ
-//            thumbSubscriber.consuming();
+            thumbSubscriber.consuming();
             //end RabbitMQ
             
             //Kafka
-            certificateConfiguration.create();
+            //certificateConfiguration.create();
             thumbKafkaSubscriber.consuming();
             //end Kafka
         } catch (Exception e) {
