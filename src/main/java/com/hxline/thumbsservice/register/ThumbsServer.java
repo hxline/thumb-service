@@ -54,7 +54,7 @@ public class ThumbsServer {
             
             //Kafka
             //certificateConfiguration.create();
-            thumbKafkaSubscriber.run();
+            new Thread(thumbKafkaSubscriber);
             //end Kafka
             
             //RabbitMQ
