@@ -37,6 +37,9 @@
     </bean>-->    
     
     <bean id="thumbSubscriber" class="com.hxline.thumbsservice.messaging.subscriber.ThumbSubscriber">
+        <constructor-arg>
+            <bean factory-bean="eurekaInstance" factory-method="getHost" />
+        </constructor-arg>
         <property name="connectionFactory" ref="connectionFactory"/>
         <property name="thumbServices" ref="thumbServices" />
         <property name="serviceInstance">

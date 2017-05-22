@@ -12,10 +12,14 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
  *
  * @author Handoyo
  */
-public class ThumbKafkaSubscriber {
+public class ThumbKafkaSubscriber extends Thread{
 
     private String serviceInstance;
     private ThumbServices thumbServices;
+
+    public ThumbKafkaSubscriber(String name) {
+        super(name);
+    }
 
     public void setServiceInstance(String serviceInstance) {
         this.serviceInstance = serviceInstance;
@@ -62,7 +66,20 @@ public class ThumbKafkaSubscriber {
                 }
             }
         } catch (Exception e) {
+            //stop
+            for (Thread thread : Thread.getAllStackTraces().keySet()) {
+                if (thread.getName().equalsIgnoreCase(serviceInstance)) {
+                    thread.interrupt();
+                }
+            }
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void run() {
+        while (!isInterrupted()) {
+            consuming();
+        }
+    }   
 }
