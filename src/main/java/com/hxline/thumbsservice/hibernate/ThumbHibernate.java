@@ -1,49 +1,73 @@
 package com.hxline.thumbsservice.hibernate;
 
+import com.hxline.thumbsservice.component.HibernateRepository;
+import com.hxline.thumbsservice.messaging.publisher.ThumbPublisher;
 import com.hxline.thumbsservice.domain.Thumb;
+import com.hxline.thumbsservice.hibernate.interfaces.ThumbHibernateInterface;
+import com.hxline.thumbsservice.messaging.publisher.ThumbKafkaPublisher;
+import java.util.ArrayList;
 import java.util.List;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author Handoyo
  */
-public class ThumbHibernate {
+@Repository
+@Transactional
+public class ThumbHibernate extends HibernateRepository implements ThumbHibernateInterface {
 
-    private SessionFactory sessionFactory;
+    //Kafka
+    private String serviceInstance;
+    private ThumbKafkaPublisher thumbKafkaPublisher;
 
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public void setServiceInstance(String serviceInstance) {
+        this.serviceInstance = serviceInstance;
     }
 
+    public void setThumbKafkaPublisher(ThumbKafkaPublisher thumbKafkaPublisher) {
+        this.thumbKafkaPublisher = thumbKafkaPublisher;
+    }
+    //end Kafka
+
+    //RabbitMQ
+    private ThumbPublisher thumbPublisher;
+
+    public void setThumbPublisher(ThumbPublisher thumbPublisher) {
+        this.thumbPublisher = thumbPublisher;
+    }
+    //end RabbitMQ
+
+    @Override
     public void save(Thumb thumb) {
-        Session session = this.sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        session.saveOrUpdate(thumb);
-        transaction.commit();
-        session.close();
-        closeConnection();
+        try {
+            getSession().saveOrUpdate(thumb);
+            //Kafka
+            thumbKafkaPublisher = new ThumbKafkaPublisher(serviceInstance, thumb, thumb.toString());
+            thumbKafkaPublisher.start();
+            //end kafka
+            
+            //rabbitmq
+            //thumbPublisher.send(thumb);
+            //rabbitmq
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
+    @Override
+    public void saveQueue(Thumb thumb) {
+        getSession().saveOrUpdate(thumb);
+    }
+
+    @Override
     public List<Thumb> getAll() {
-        Session session = this.sessionFactory.openSession();
-        List<Thumb> thumbs = session.createQuery("FROM Thumb").list();
-        session.close();
-        closeConnection();
-        return thumbs;
+        return new ArrayList(getSession().createQuery("FROM Thumb").list());
     }
 
+    @Override
     public Thumb get(String id) {
-        Session session = this.sessionFactory.openSession();
-        Thumb thumb = (Thumb) session.get(Thumb.class, id);
-        session.close();
-        closeConnection();
-        return thumb;
-    }
-    
-    public void closeConnection() {
-        sessionFactory.close();
+        return getSession().get(Thumb.class, id);
     }
 }

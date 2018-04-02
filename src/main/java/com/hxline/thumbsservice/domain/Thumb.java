@@ -41,4 +41,9 @@ public class Thumb {
     public void setThumbsDown(Integer thumbsDown) {
         this.thumbsDown = thumbsDown;
     }   
+
+    @Override
+    public String toString() {
+        return "Thumb{" + "threadId=" + threadId + ", thumbsUp=" + thumbsUp + ", thumbsDown=" + thumbsDown + '}';
+    }
 }
